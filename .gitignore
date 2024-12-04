@@ -33,6 +33,11 @@ MANIFEST
 *.manifest
 *.spec
 
+
+.git*
+**/*.pyc
+.venv/
+
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
