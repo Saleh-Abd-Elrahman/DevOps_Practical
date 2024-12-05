@@ -13,6 +13,7 @@ resource acr 'Microsoft.ContainerRegistry/registries@2021-09-01' = {
   }
 }
 
+
 output credentials object = {
   username: acr.listCredentials().username
   password: acr.listCredentials().passwords[0].value
