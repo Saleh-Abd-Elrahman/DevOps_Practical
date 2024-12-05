@@ -55,6 +55,12 @@ module webApp './modules/awa.bicep' = {
       linuxFxVersion: 'DOCKER|${containerRegistryName}.azurecr.io/${containerRegistryImageName}:${containerRegistryImageVersion}'
       appCommandLine: ''
     }
+    appSettingsKeyValuePairs: {
+      WEBSITES_ENABLE_APP_SERVICE_STORAGE: 'false'
+      DOCKER_REGISTRY_SERVER_URL: '${containerRegistryName}.azurecr.io'
+      DOCKER_REGISTRY_SERVER_USERNAME: acr.outputs.credentials.username
+      DOCKER_REGISTRY_SERVER_PASSWORD: acr.outputs.credentials.password
+    }
   }
 
 }
