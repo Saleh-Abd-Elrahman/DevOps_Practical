@@ -6,7 +6,7 @@
       "value": "West Europe"
     },
     "containerRegistryName": {
-      "value": "karlexerciseacr"
+      "value": "salehexerciseacr"
     },
     "containerRegistryImageName": {
       "value": "flask-demo"
@@ -15,10 +15,10 @@
       "value": "latest"
     },
     "appServicePlanName": {
-      "value": "KarlExerciseAppServicePlan"
+      "value": "SalehExerciseAppServicePlan"
     },
     "webAppName": {
-      "value": "KarlExerciseWebApp"
+      "value": "SalehExerciseWebApp"
       
     }
   }
