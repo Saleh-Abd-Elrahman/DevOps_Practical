@@ -1,4 +1,3 @@
-
 name: Deploy Container App to Azure
 
 on:
@@ -33,9 +32,8 @@ jobs:
         password: ${{ secrets.ACR_PASSWORD }}
 
     - name: Set image version
-        id: image-version
-        run: echo "version=${GITHUB_REF#refs/heads/}-$(date +'%Y.%m.%d.%H.%M')" >> $GITHUB_OUTPUT
-
+      id: image-version
+      run: echo "version=${GITHUB_REF#refs/heads/}-$(date +'%Y.%m.%d.%H.%M')" >> $GITHUB_OUTPUT
 
     - name: Build and Push Docker Image
       run: |
