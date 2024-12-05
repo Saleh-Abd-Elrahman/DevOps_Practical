@@ -52,7 +52,7 @@ module webApp './modules/awa.bicep' = {
     kind: 'app'
     serverFarmResourceId: appServicePlan.outputs.resourceId
     siteConfig: {
-      linuxFxVersion: 'DOCKER|${containerRegistryName}.azurecr.io/${containerRegistryImageName}:${containerRegistryImageVersion}'
+      linuxFxVersion: 'DOCKER|${containerRegistryName}.azurecr.io/${containerRegistryImageName}'
       appCommandLine: ''
     }
     appSettingsKeyValuePairs: {
