@@ -32,8 +32,9 @@ jobs:
         password: ${{ secrets.ACR_PASSWORD }}
 
     - name: Set image version
-      id: image-version
-      run: echo "::set-output name=version::$(echo ${GITHUB_REF#refs/heads/})-$(date +'%Y.%m.%d.%H.%M')"
+        id: image-version
+        run: echo "version=${GITHUB_REF#refs/heads/}-$(date +'%Y.%m.%d.%H.%M')" >> $GITHUB_OUTPUT
+
 
     - name: Build and Push Docker Image
       run: |
