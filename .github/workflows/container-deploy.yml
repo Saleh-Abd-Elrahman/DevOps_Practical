@@ -15,6 +15,8 @@ env:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    outputs:
+      image-version: ${{ steps.image-version.outputs.version }}
     steps:
     - name: Checkout code
       uses: actions/checkout@main
@@ -57,4 +59,4 @@ jobs:
       with:
         app-name: ${{ env.WEBAPP_NAME }}
         images: |
-          ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_BASE_NAME }}:${{ needs.build-and-push.outputs.image-version.version }}
+          ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_BASE_NAME }}:${{ needs.build-and-push.outputs.image-version }}
