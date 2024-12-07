@@ -33,9 +33,9 @@ resource webApp 'Microsoft.Web/sites@2021-02-01' = {
       appCommandLine: siteConfig.appCommandLine
       // Add appSettings within siteConfig
       appSettings: [
-        for key in union(objectKeys(appSettingsKeyValuePairs), objectKeys(dockerAppSettings)): {
+        for key in objectKeys(union(appSettingsKeyValuePairs, dockerAppSettings)): {
           name: key
-          value: dockerAppSettings[key] ?? appSettingsKeyValuePairs[key]
+          value: union(appSettingsKeyValuePairs, dockerAppSettings)[key]
         }
       ]
     }
