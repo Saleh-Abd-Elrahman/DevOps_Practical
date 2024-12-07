@@ -11,6 +11,9 @@ env:
   RESOURCE_GROUP: 'BCSAI2024-DEVOPS-STUDENTS-A-DEV'
   WEBAPP_NAME: 'SalehExerciseWebApp'
   APP_SERVICE_PLAN: 'SalehExerciseAppServicePlan'
+  KEY_VAULT_NAME: keyVaultName
+  ACR_USERNAME_SECRET: acrAdminUserNameSecretName
+  ACR_PASSWORD_SECRET: acrAdminUserPasswordSecretName
 
 jobs:
   build-and-push:
@@ -26,12 +29,24 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Login to ACR
-      uses: azure/docker-login@v1
+    name: 'Get ACR credentials from Azure Key Vault'
+      uses: azure/CLI@v1
       with:
-        login-server: ${{ env.REGISTRY_LOGIN_SERVER }}
-        username: ${{ secrets.ACR_USERNAME }}
-        password: ${{ secrets.ACR_PASSWORD }}
+        inlineScript: |
+          ACR_USERNAME=$(az keyvault secret show --name ${{ env.ACR_USERNAME_SECRET }} --vault-name ${{ env.KEY_VAULT_NAME }} --query value -o tsv)
+          ACR_PASSWORD=$(az keyvault secret show --name ${{ env.ACR_PASSWORD_SECRET }} --vault-name ${{ env.KEY_VAULT_NAME }} --query value -o tsv)
+          echo "REGISTRY_USERNAME=$ACR_USERNAME" >> $GITHUB_ENV
+          echo "REGISTRY_PASSWORD=$ACR_PASSWORD" >> $GITHUB_ENV
+
+
+    - name: Debug ACR credentials
+      run: |
+        echo "ACR Username: $REGISTRY_USERNAME"
+        echo "ACR Password Length: ${#REGISTRY_PASSWORD}"
+    
+    - name: Login to ACR
+      run: |
+        echo "$REGISTRY_PASSWORD" | docker login $REGISTRY_LOGIN_SERVER -u $REGISTRY_USERNAME --password-stdin
 
     - name: Set image version
       id: image-version
