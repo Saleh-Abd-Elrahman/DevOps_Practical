@@ -58,6 +58,7 @@ module keyVault './modules/key-vault.bicep' = {
     location: location
     enableVaultForDeployment: enableVaultForDeployment
     roleAssignments: roleAssignments
+    enableSoftDelete: true
   }
 }
 

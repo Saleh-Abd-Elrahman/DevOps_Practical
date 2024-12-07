@@ -10,6 +10,17 @@ param enableVaultForDeployment bool
 @description('Role assignments object')
 param roleAssignments array
 
+@description('SKU of the Key Vault')
+param sku string = 'standard'
+
+
+param enableRbacAuthorization bool = true
+
+
+param enableVaultForTemplateDeployment bool = true
+param enableSoftDelete bool
+
+
 var builtInRoleNames = {
   Contributor: subscriptionResourceId(
     'Microsoft.Authorization/roleDefinitions',
@@ -69,18 +80,20 @@ var builtInRoleNames = {
   )
 }
 
-resource kv 'Microsoft.KeyVault/vaults@2023-02-01' = {
+resource kv 'Microsoft.KeyVault/vaults@2022-07-01' = {
   name: name
   location: location
   properties: {
-    tenantId: subscription().tenantId
-    enableRbacAuthorization: false
-    enabledForTemplateDeployment: enableVaultForDeployment
+    enabledForDeployment: enableVaultForDeployment
+    enabledForTemplateDeployment: enableVaultForTemplateDeployment
+    enableSoftDelete: enableSoftDelete
+    enableRbacAuthorization: enableRbacAuthorization 
     sku: {
+      name: sku
       family: 'A'
-      name: 'standard'
     }
-    accessPolicies: [ ]
+    accessPolicies: []
+    tenantId: subscription().tenantId
   }
 }
 
