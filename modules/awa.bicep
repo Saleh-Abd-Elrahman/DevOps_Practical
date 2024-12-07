@@ -13,7 +13,6 @@ resource webApp 'Microsoft.Web/sites@2021-02-01' = {
   properties: {
     serverFarmId: serverFarmResourceId
     siteConfig: {
-      // Include existing siteConfig properties
       linuxFxVersion: siteConfig.linuxFxVersion
       appCommandLine: siteConfig.appCommandLine
       // Add appSettings within siteConfig
