@@ -15,7 +15,7 @@ resource kv 'Microsoft.KeyVault/vaults@2023-02-01' = {
   location: location
   properties: {
     tenantId: subscription().tenantId
-    enableRbacAuthorization: true
+    enableRbacAuthorization: false
     enabledForTemplateDeployment: enableVaultForDeployment
     sku: {
       family: 'A'
