@@ -20,21 +20,6 @@
     "webAppName": {
       "value": "SalehExerciseWebApp"
       
-    },
-
-    "keyVaultName": {
-      "value": "salehexercisekeyvault"
-    },
-
-    "keyVaultSecretNameACRUsername": {
-      "value": "salehexercisekeyvaultsecret"
-    },
-
-    "keyVaultSecretNameACRPassword1" : {
-      "value": "ACRPassword1"
-    }, 
-    "keyVaultSecretNameACRPassword2" : {
-      "value": "ACRPassword2"
     }
-}
+  }
 }
