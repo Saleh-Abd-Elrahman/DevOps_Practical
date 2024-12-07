@@ -25,7 +25,7 @@ jobs:
           --name keyvaultdeployment \
           --subscription e0b9cada-61bc-4b5a-bd7a-52c606726b3b  \
           --resource-group BCSAI2024-DEVOPS-STUDENTS-A-DEV \
-          --template-file main.bicep \
+          --template-file ./modules/key-vault.bicep \
           --parameters @key-vault.parameters.json
 
 
