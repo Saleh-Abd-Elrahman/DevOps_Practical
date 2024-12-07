@@ -6,8 +6,8 @@ on:
       - main
 
 env:                 # Replace with your Key Vault name
-  ACR_USERNAME_SECRET: acrAdminUserNameSecretName
-  ACR_PASSWORD_SECRET: acrAdminPasswordSecretName
+  ACR_USERNAME_SECRET: acrAdminUsertName
+  ACR_PASSWORD_SECRET: acrAdminUserPassword1
   REGISTRY_LOGIN_SERVER: 'salehexerciseacr.azurecr.io'
   IMAGE_BASE_NAME: 'flask-demo'
   RESOURCE_GROUP: 'BCSAI2024-DEVOPS-STUDENTS-A-DEV'
