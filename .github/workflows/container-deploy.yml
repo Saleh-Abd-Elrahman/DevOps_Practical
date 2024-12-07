@@ -11,7 +11,7 @@ env:
   RESOURCE_GROUP: 'BCSAI2024-DEVOPS-STUDENTS-A-DEV'
   WEBAPP_NAME: 'SalehExerciseWebApp'
   APP_SERVICE_PLAN: 'SalehExerciseAppServicePlan'
-  KEY_VAULT_NAME: keyVaultName
+  KEY_VAULT_NAME: 'salehexercise-kv-2'
 
 jobs:
   build-and-push:
