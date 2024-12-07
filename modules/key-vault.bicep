@@ -20,7 +20,7 @@ resource roleAssignmentsLoop 'Microsoft.Authorization/roleAssignments@2020-04-01
   name: guid(keyVault.id, assignment.roleDefinitionIdOrName, assignment.principalId)
   scope: keyVault
   properties: {
-    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', assignment.roleDefinitionIdOrName)
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '7f951dda-4ed3-4680-a7ca-43fe172d538d') // Key Vault Secrets User role ID
     principalId: assignment.principalId
     principalType: assignment.principalType
   }
