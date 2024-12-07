@@ -11,7 +11,7 @@ env:
   RESOURCE_GROUP: 'BCSAI2024-DEVOPS-STUDENTS-A-DEV'
   WEBAPP_NAME: 'SalehExerciseWebApp'
   APP_SERVICE_PLAN: 'SalehExerciseAppServicePlan'
-  KEY_VAULT_NAME: 'salehexercise-kv-2'
+  KEY_VAULT_NAME: keyVaultName
 
 jobs:
   build-and-push:
@@ -30,9 +30,9 @@ jobs:
     # Step 3: Retrieve secrets from Azure Key Vault using Azure CLI
     - name: Get secrets from Azure Key Vault
       run: |
-        REGISTRY_USERNAME=$(az keyvault secret show --vault-name ${{ env.KEYVAULT_NAME }} --name secretAdminUserName --query value -o tsv)
-        REGISTRY_PASSWORD=$(az keyvault secret show --vault-name ${{ env.KEYVAULT_NAME }} --name secretAdminPassword1 --query value -o tsv)
-        REGISTRY_PASSWORD1=$(az keyvault secret show --vault-name ${{ env.KEYVAULT_NAME }} --name secretAdminPassword2 --query value -o tsv)
+        REGISTRY_USERNAME=$(az keyvault secret show --vault-name ${{ env.KEY_VAULT_NAME }} --name secretAdminUserName --query value -o tsv)
+        REGISTRY_PASSWORD=$(az keyvault secret show --vault-name ${{ env.KEY_VAULT_NAME}} --name secretAdminPassword1 --query value -o tsv)
+        REGISTRY_PASSWORD1=$(az keyvault secret show --vault-name ${{ env.KEY_VAULT_NAME }} --name secretAdminPassword2 --query value -o tsv)
         echo "REGISTRY_USERNAME=$REGISTRY_USERNAME" >> $GITHUB_ENV
         echo "REGISTRY_PASSWORD=$REGISTRY_PASSWORD" >> $GITHUB_ENV
         echo "REGISTRY_PASSWORD1=$REGISTRY_PASSWORD1" >> $GITHUB_ENV
