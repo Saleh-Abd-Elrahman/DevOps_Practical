@@ -29,7 +29,7 @@ module keyVault './modules/key-vault.bicep' = {
     roleAssignments: [
       {
         principalId: '7200f83e-ec45-4915-8c52-fb94147cfe5a'
-        roleDefinitionIdOrName: 'Key Vault Secrets User'
+        roleDefinitionIdOrName: '4633458b-17de-408a-b874-0445c86b69e6'
         principalType: 'ServicePrincipal'
       }
     ]
