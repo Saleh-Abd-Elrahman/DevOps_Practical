@@ -25,10 +25,10 @@ jobs:
           --name salehexercise-kv \
           --subscription e0b9cada-61bc-4b5a-bd7a-52c606726b3b \
           --resource-group BCSAI2024-DEVOPS-STUDENTS-A-DEV \
-          --template-file key-vault.bicep \
+          --template-file ./modules/key-vault.bicep \
           --parameters @main.parameters.json
 
-          
+
     - name: Deploy Bicep Template
       run: |
         az deployment group create \
