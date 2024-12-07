@@ -29,6 +29,20 @@
     },
     "keyVaultSecretNameACRPassword1": {  
       "value": "yellsalehsecretuser"  
+    },
+    "roleAssignments": {
+      "value": [
+        {
+          "principalId": "7200f83e-ec45-4915-8c52-fb94147cfe5a", 
+          "roleDefinitionIdOrName": "Key Vault Secrets User",
+          "principalType": "ServicePrincipal"
+        },
+        {
+          "principalId": "f248a218-1ef9-47bf-9928-ae47093fd442", 
+          "roleDefinitionIdOrName": "Key Vault Secrets User",
+          "principalType": "ServicePrincipal"
+        }
+      ]
     }
 
   }
