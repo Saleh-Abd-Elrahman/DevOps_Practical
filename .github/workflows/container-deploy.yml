@@ -36,14 +36,6 @@ jobs:
         username: ${{ env.ACR_USERNAME }}
         password: ${{ env.ACR_PASSWORD }}
 
-
-    - name: 'Get docker registry credentials from Azure Key Vault'
-      uses: azure/CLI@v1
-      with:
-        inlineScript: |
-          echo "ACR_USERNAME=$(az keyvault secret show --name ${{ env.KEY_VAULT_SECRET_NAME_ACR_USERNAME }} --vault-name ${{ env.KEY_VAULT_NAME }} --query value -o tsv)" >> $GITHUB_ENV
-          echo "ACR_PASSWORD=$(az keyvault secret show --name ${{ env.KEY_VAULT_SECRET_NAME_ACR_PASSWORD }} --vault-name ${{ env.KEY_VAULT_NAME }} --query value -o tsv)" >> $GITHUB_ENV
-
     - name: Set image version
       id: image-version
       run: echo "version=${GITHUB_REF#refs/heads/}-$(date +'%Y.%m.%d.%H.%M')" >> $GITHUB_OUTPUT
