@@ -23,7 +23,7 @@ param KeyVaultName string
 module keyVault './modules/key-vault.bicep' = {
   name: 'deployKeyVault'
   params: {
-    name: '${KeyVaultName}-kv'
+    name: KeyVaultName
     location: location
     enableVaultForDeployment: true
     roleAssignments: [
