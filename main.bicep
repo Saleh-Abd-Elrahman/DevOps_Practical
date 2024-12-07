@@ -17,12 +17,61 @@ param appServicePlanName string
 param webAppName string
 
 
+
+@description('Name of the Key Vault')
+param keyVaultName string = 'myKeyVaultName'
+
+@description('Enable vault for deployment')
+param enableVaultForDeployment bool = true
+
+@description('Role assignments for Key Vault')
+param roleAssignments array = [
+  {
+    principalId: '7200f83e-ec45-4915-8c52-fb94147cfe5a'
+    roleDefinitionIdOrName: 'Key Vault Secrets User'
+    principalType: 'ServicePrincipal'
+  }
+]
+
+@description('Key Vault secret name for ACR Admin Username')
+param adminCredentialsKeyVaultSecretUserName string = 'acr-username'
+
+@description('Key Vault secret name for ACR Admin Password #1')
+param adminCredentialsKeyVaultSecretUserPassword1 string = 'acr-password1'
+
+@description('Key Vault secret name for ACR Admin Password #2')
+param adminCredentialsKeyVaultSecretUserPassword2 string = 'acr-password2'
+
+
+// Deploy the Key Vault
+module keyVaultModule './modules/key-vault.bicep' = {
+  name: 'keyVaultModule'
+  params: {
+    name: keyVaultName
+    location: location
+    enableVaultForDeployment: enableVaultForDeployment
+    roleAssignments: roleAssignments
+  }
+}
+
+
+// Reference to the Key Vault
+resource keyVault 'Microsoft.KeyVault/vaults@2023-02-01' existing = {
+  name: keyVaultName
+}
+
+
+// Deploy ACR and store credentials in KV
 module acr './modules/acr.bicep' = {
   name: 'acrModule'
   params: {
     name: containerRegistryName
     location: location
     acrAdminUserEnabled: true
+    adminCredentialsKeyVaultResourceId: keyVaultModule.outputs.keyVaultResourceId
+    adminCredentialsKeyVaultSecretUserName: adminCredentialsKeyVaultSecretUserName
+    adminCredentialsKeyVaultSecretUserPassword1: adminCredentialsKeyVaultSecretUserPassword1
+    adminCredentialsKeyVaultSecretUserPassword2: adminCredentialsKeyVaultSecretUserPassword2
   }
 }
 
@@ -44,6 +93,7 @@ module appServicePlan './modules/asp.bicep' = {
   }
 }
 
+// Deploy Web App with secrets from Key Vault
 module webApp './modules/awa.bicep' = {
   name: 'webAppModule'
   params: {
@@ -57,10 +107,9 @@ module webApp './modules/awa.bicep' = {
     }
     appSettingsKeyValuePairs: {
       WEBSITES_ENABLE_APP_SERVICE_STORAGE: 'false'
-      DOCKER_REGISTRY_SERVER_URL: 'https://${containerRegistryName}.azurecr.io'
-      DOCKER_REGISTRY_SERVER_USERNAME: acr.outputs.credentials.username
-      DOCKER_REGISTRY_SERVER_PASSWORD: acr.outputs.credentials.password
     }
+    dockerRegistryServerUrl: 'https://${containerRegistryName}.azurecr.io'
+    dockerRegistryServerUserName: keyVault.getSecret(adminCredentialsKeyVaultSecretUserName)
+    dockerRegistryServerPassword: keyVault.getSecret(adminCredentialsKeyVaultSecretUserPassword1)
   }
-
 }

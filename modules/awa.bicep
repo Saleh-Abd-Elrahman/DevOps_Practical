@@ -5,6 +5,22 @@ param serverFarmResourceId string
 param siteConfig object
 param appSettingsKeyValuePairs object
 
+@secure()
+param dockerRegistryServerUrl string
+
+@secure()
+param dockerRegistryServerUserName string
+
+@secure()
+param dockerRegistryServerPassword string
+
+
+var dockerAppSettings = {
+  DOCKER_REGISTRY_SERVER_URL: dockerRegistryServerUrl
+  DOCKER_REGISTRY_SERVER_USERNAME: dockerRegistryServerUserName
+  DOCKER_REGISTRY_SERVER_PASSWORD: dockerRegistryServerPassword
+}
+
 
 resource webApp 'Microsoft.Web/sites@2021-02-01' = {
   name: name
@@ -17,9 +33,9 @@ resource webApp 'Microsoft.Web/sites@2021-02-01' = {
       appCommandLine: siteConfig.appCommandLine
       // Add appSettings within siteConfig
       appSettings: [
-        for key in objectKeys(appSettingsKeyValuePairs): {
+        for key in union(objectKeys(appSettingsKeyValuePairs), objectKeys(dockerAppSettings)): {
           name: key
-          value: appSettingsKeyValuePairs[key]
+          value: dockerAppSettings[key] ?? appSettingsKeyValuePairs[key]
         }
       ]
     }
