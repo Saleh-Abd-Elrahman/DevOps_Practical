@@ -14,9 +14,7 @@ param adminCredentialsKeyVaultSecretUserName string
 @description('Key Vault secret name for ACR Admin Password #1')
 param adminCredentialsKeyVaultSecretUserPassword1 string
 
-@secure()
-@description('Key Vault secret name for ACR Admin Password #2')
-param adminCredentialsKeyVaultSecretUserPassword2 string
+
 
 
 resource adminCredentialsKeyVault 'Microsoft.KeyVault/vaults@2021-10-01' existing = {
@@ -53,14 +51,7 @@ resource secretAdminPassword1 'Microsoft.KeyVault/vaults/secrets@2023-02-01' = {
   }
 }
 
-// Store ACR Password #2 as a secret
-resource secretAdminPassword2 'Microsoft.KeyVault/vaults/secrets@2023-02-01' = {
-  name: adminCredentialsKeyVaultSecretUserPassword2
-  parent: adminCredentialsKeyVault
-  properties: {
-    value: acr.listCredentials().passwords[1].value
-  }
-}
+
 
 //output credentials object = {
 //  username: acr.listCredentials().username

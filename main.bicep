@@ -47,9 +47,6 @@ param acrAdminUserNameSecretName string = 'acrAdminUserName'
 @description('Name of the Key Vault secret for ACR Password')
 param acrAdminUserPasswordSecretName string = 'acrAdminUserPassword1'
 
-@description('Name of the Key Vault secret for ACR Password2')
-param acrAdminUserPasswordSecretName2 string = 'acrAdminUserPassword2'
-
 
 module keyVault './modules/key-vault.bicep' = {
   name: 'keyVaultModule'
@@ -72,7 +69,6 @@ module acr './modules/acr.bicep' = {
     adminCredentialsKeyVaultResourceId: keyVault.outputs.keyVaultResourceId
     adminCredentialsKeyVaultSecretUserName: acrAdminUserNameSecretName
     adminCredentialsKeyVaultSecretUserPassword1: acrAdminUserPasswordSecretName
-    adminCredentialsKeyVaultSecretUserPassword2: acrAdminUserPasswordSecretName2
   }
 }
 
@@ -95,18 +91,13 @@ module appServicePlan './modules/asp.bicep' = {
 }
 
 resource keyvault 'Microsoft.KeyVault/vaults@2023-02-01' existing = {
-  name: keyVault.outputs.keyVaultName
+  name: keyVaultName
 }
 
 // Deploy Web App with secrets from Key Vault
 
 module webApp './modules/awa.bicep' = {
   name: 'webAppModule'
-  dependsOn: [
-    keyVault
-    acr
-    appServicePlan
-  ]
   params: {
     name: webAppName
     location: location
