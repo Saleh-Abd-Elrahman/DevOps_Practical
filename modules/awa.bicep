@@ -12,14 +12,18 @@ resource webApp 'Microsoft.Web/sites@2021-02-01' = {
   kind: kind
   properties: {
     serverFarmId: serverFarmResourceId
-    siteConfig: siteConfig
-    appSettings: [
-      // Transform the appSettingsKeyValuePairs object into an array of name-value objects
-      for key in objectKeys(appSettingsKeyValuePairs): {
-        name: key
-        value: appSettingsKeyValuePairs[key]
-      }
-    ]
+    siteConfig: {
+      // Include existing siteConfig properties
+      linuxFxVersion: siteConfig.linuxFxVersion
+      appCommandLine: siteConfig.appCommandLine
+      // Add appSettings within siteConfig
+      appSettings: [
+        for key in objectKeys(appSettingsKeyValuePairs): {
+          name: key
+          value: appSettingsKeyValuePairs[key]
+        }
+      ]
+    }
   }
   
 }
