@@ -22,7 +22,7 @@
       
     },
 
-    "keyVaultName": {
+    "name": {
       "value": "salehexercise-kv"
     },
     "enableVaultForDeployment": {
