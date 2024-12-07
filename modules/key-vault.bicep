@@ -21,6 +21,7 @@ resource kv 'Microsoft.KeyVault/vaults@2023-02-01' = {
       family: 'A'
       name: 'standard'
     }
+    accessPolicies: [ ]
   }
 }
 
