@@ -18,7 +18,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2021-06-01-preview' = {
 }
 
 resource roleAssignmentsLoop 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = [for assignment in roleAssignments: {
-  name: guid(keyVault.id, assignment.roleDefinitionIdOrName, assignment.principalId)
+  name: guid(keyVault.id, '7f951dda-4ed3-4680-a7ca-43fe172d538d', assignment.principalId)
   scope: keyVault
   properties: {
     roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '7f951dda-4ed3-4680-a7ca-43fe172d538d') // Key Vault Secrets User role ID
