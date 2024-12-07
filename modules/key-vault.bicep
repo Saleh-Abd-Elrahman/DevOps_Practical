@@ -2,6 +2,7 @@ param name string
 param location string
 param enableVaultForDeployment bool
 param roleAssignments array
+param sku string = 'standard'
 
 resource keyVault 'Microsoft.KeyVault/vaults@2021-10-01' = {
   name: name
@@ -9,7 +10,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2021-10-01' = {
   properties: {
     sku: {
       family: 'A'
-      name: 'standard'
+      name: sku
     }
     enableRbacAuthorization: true
     enabledForDeployment: enableVaultForDeployment
