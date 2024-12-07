@@ -27,13 +27,16 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
 
+    - name: Get ACR credentials from Azure Key Vault
+      uses: azure/CLI@v1
+      with:
+        inlineScript: |
+          echo "REGISTRY_USERNAME=$(az keyvault secret show --name acr-username --vault-name ${containerRegistryName}-kv --query value -o tsv)" >> $GITHUB_ENV
+          echo "REGISTRY_PASSWORD=$(az keyvault secret show --name acr-password --vault-name ${containerRegistryName}-kv --query value -o tsv)" >> $GITHUB_ENV
 
     - name: Login to ACR
-      uses: azure/docker-login@v1
-      with:
-        login-server: ${{ env.REGISTRY_LOGIN_SERVER }}
-        username: ${{ secrets.ACR_USERNAME }}
-        password: ${{ secrets.ACR_PASSWORD }}
+      run: |
+        docker login ${{ env.REGISTRY_LOGIN_SERVER }} -u ${{ env.REGISTRY_USERNAME }} -p ${{ env.REGISTRY_PASSWORD }}
 
     - name: Set image version
       id: image-version

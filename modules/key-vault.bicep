@@ -1,29 +1,28 @@
 param name string
 param location string
-param enableVaultForDeployment bool 
+param enableVaultForDeployment bool
 param roleAssignments array
 
-resource keyVault 'Microsoft.KeyVault/vaults@2021-06-01-preview' = {
+resource keyVault 'Microsoft.KeyVault/vaults@2021-10-01' = {
   name: name
   location: location
   properties: {
-    tenantId: subscription().tenantId
     sku: {
       family: 'A'
       name: 'standard'
     }
+    enableRbacAuthorization: true
     enabledForDeployment: enableVaultForDeployment
-    enableRbacAuthorization: true // Enable RBAC
+    tenantId: subscription().tenantId
   }
 }
 
-resource roleAssignmentsLoop 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = [for assignment in roleAssignments: {
-  name: guid(keyVault.id, '7f951dda-4ed3-4680-a7ca-43fe172d538d', assignment.principalId)
-  scope: keyVault
+resource keyVaultRoleAssignments 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = [for roleAssignment in roleAssignments: {
+  name: guid(keyVault.id, roleAssignment.principalId, roleAssignment.roleDefinitionIdOrName)
   properties: {
-    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '7f951dda-4ed3-4680-a7ca-43fe172d538d') // Key Vault Secrets User role ID
-    principalId: assignment.principalId
-    principalType: assignment.principalType
+    principalId: roleAssignment.principalId
+    principalType: roleAssignment.principalType
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roleAssignment.roleDefinitionIdOrName)
   }
 }]
 

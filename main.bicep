@@ -17,12 +17,32 @@ param appServicePlanName string
 param webAppName string
 
 
+module keyVault './modules/key-vault.bicep' = {
+  name: 'deployKeyVault'
+  params: {
+    name: '${containerRegistryName}-kv'
+    location: location
+    enableVaultForDeployment: true
+    roleAssignments: [
+      {
+        principalId: '7200f83e-ec45-4915-8c52-fb94147cfe5a'
+        roleDefinitionIdOrName: 'Key Vault Secrets User'
+        principalType: 'ServicePrincipal'
+      }
+    ]
+  }
+}
+
 module acr './modules/acr.bicep' = {
   name: 'acrModule'
   params: {
     name: containerRegistryName
     location: location
     acrAdminUserEnabled: true
+    adminCredentialsKeyVaultResourceId: keyVault.outputs.keyVaultResourceId
+    adminCredentialsKeyVaultSecretUserName: 'adminUserName'
+    adminCredentialsKeyVaultSecretUserPassword1: 'adminPassword1'
+    adminCredentialsKeyVaultSecretUserPassword2: 'adminPassword2'
   }
 }
 
@@ -55,12 +75,10 @@ module webApp './modules/awa.bicep' = {
       linuxFxVersion: 'DOCKER|${containerRegistryName}.azurecr.io/${containerRegistryImageName}:${containerRegistryImageVersion}'
       appCommandLine: ''
     }
-    appSettingsKeyValuePairs: {
-      WEBSITES_ENABLE_APP_SERVICE_STORAGE: 'false'
-      DOCKER_REGISTRY_SERVER_URL: 'https://${containerRegistryName}.azurecr.io'
-      DOCKER_REGISTRY_SERVER_USERNAME: acr.outputs.credentials.username
-      DOCKER_REGISTRY_SERVER_PASSWORD: acr.outputs.credentials.password
-    }
+    appSettingsKeyValuePairs: {}
+    dockerRegistryServerUrl: 'https://${containerRegistryName}.azurecr.io'
+    dockerRegistryServerUserName: 'acr-username'
+    dockerRegistryServerPassword: 'acr-password'
   }
 
 }
