@@ -5,6 +5,9 @@
     "location": {
       "value": "West Europe"
     },
+    "name": {
+      "value": "salehexercise-kv"
+    },
     "KeyVaultName": {
       "value": "salehexercise"
     },
