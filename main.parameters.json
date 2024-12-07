@@ -21,12 +21,12 @@
       "value": "SalehExerciseWebApp"
       
     },
-    "enableContainerRegistryForDeployment": {
+    "enableVaultForDeployment": {
       "value": true
     },
   
     "KeyVaultName": {
-      "value": "salehexercisekv"
+      "value": "salehexercise-kv"
     },
     "roleAssignments": {
       "value": [
