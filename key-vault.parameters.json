@@ -3,16 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
       "name": {
-        "value": "myuniquekeyvault123"
+        "value": "myuniquekeyvault123" 
       },
       "location": {
         "value": "West Europe"
-      },
-      "principalId": {
-        "value": "7200f83e-ec45-4915-8c52-fb94147cfe5a"
-      },
-      "roleDefinitionIdOrName": {
-        "value": "Key Vault Secrets User"
       },
       "enableVaultForDeployment": {
         "value": true
