@@ -39,6 +39,12 @@ param roleAssignments array = [
     principalType: 'Group'
   }
 
+  {
+    principalId: '25d8d697-c4a2-479f-96e0-15593a830ae5'
+    roleDefinitionIdOrName: 'Key Vault Secrets User'
+    principalType: 'ServicePrincipal'
+  }
+
 ]
 
 @description('Name of the Key Vault secret for ACR Username')
