@@ -22,7 +22,7 @@
       
     },
 
-    "keyVaultName": {
+    "keyVaultSecretNameACRUsername": {
       "value": "salehexercisekeyvault"
     },
 
