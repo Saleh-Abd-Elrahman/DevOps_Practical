@@ -16,11 +16,14 @@ param appServicePlanName string
 @description('Name of the Web App')
 param webAppName string
 
+@description('Name of the Key Vault')
+param KeyVaultName string
+
 
 module keyVault './modules/key-vault.bicep' = {
   name: 'deployKeyVault'
   params: {
-    name: '${containerRegistryName}-kv'
+    name: '${KeyVaultName}-kv'
     location: location
     enableVaultForDeployment: true
     roleAssignments: [
