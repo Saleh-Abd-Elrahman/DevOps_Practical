@@ -29,9 +29,6 @@
     },
     "keyVaultSecretNameACRPassword1": {  
       "value": "yellsalehsecretuser"  
-    },
-    "enableVaultForDeployment": {
-      "value": true
     }
 
   }
