@@ -16,32 +16,6 @@ param appServicePlanName string
 @description('Name of the Web App')
 param webAppName string
 
-@description('Role assignments for the Key Vault')
-param roleAssignments array
-
-@description('Name of the Key Vault.')
-param keyVaultName string
-
-@description('Name of the Key Vault secret for ACR username.')
-param keyVaultSecretNameACRUsername string
-
-@description('Name of the Key Vault secret for ACR password 1.')
-param keyVaultSecretNameACRPassword1 string
-
-module keyVaultModule './modules/key-vault.bicep' = {
-  name: 'keyVaultDeployment'
-  params: {
-    name: keyVaultName
-    location: location
-    enableVaultForDeployment: true
-    roleAssignments: roleAssignments
-  }
-}
-
-resource keyVault 'Microsoft.KeyVault/vaults@2021-10-01' existing = {
-  name: keyVaultName
-}
-
 
 module acr './modules/acr.bicep' = {
   name: 'acrModule'
@@ -49,9 +23,6 @@ module acr './modules/acr.bicep' = {
     name: containerRegistryName
     location: location
     acrAdminUserEnabled: true
-    adminCredentialsKeyVaultResourceId: keyVaultModule.outputs.keyVaultResourceId
-    adminCredentialsKeyVaultSecretUserName: keyVaultSecretNameACRUsername
-    adminCredentialsKeyVaultSecretUserPassword1: keyVaultSecretNameACRPassword1
   }
 }
 
@@ -86,10 +57,10 @@ module webApp './modules/awa.bicep' = {
     }
     appSettingsKeyValuePairs: {
       WEBSITES_ENABLE_APP_SERVICE_STORAGE: 'false'
+      DOCKER_REGISTRY_SERVER_URL: 'https://${containerRegistryName}.azurecr.io'
+      DOCKER_REGISTRY_SERVER_USERNAME: acr.outputs.credentials.username
+      DOCKER_REGISTRY_SERVER_PASSWORD: acr.outputs.credentials.password
     }
-    dockerRegistryServerUrl: 'https://${containerRegistryName}.azurecr.io'
-    dockerRegistryServerUserName: keyVault.getSecret(keyVaultSecretNameACRUsername)
-    dockerRegistryServerPassword: keyVault.getSecret(keyVaultSecretNameACRPassword1)
   }
 
 }
