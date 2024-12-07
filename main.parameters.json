@@ -22,8 +22,12 @@
       
     },
 
-    "keyVaultSecretNameACRUsername": {
+    "keyVaultName": {
       "value": "salehexercisekeyvault"
+    },
+
+    "keyVaultSecretNameACRUsername": {
+      "value": "salehexercisekeyvaultsecret"
     },
 
     "keyVaultSecretNameACRPassword1" : {
