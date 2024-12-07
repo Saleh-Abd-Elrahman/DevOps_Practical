@@ -20,10 +20,6 @@
     "webAppName": {
       "value": "SalehExerciseWebApp"
       
-    },
-  
-    "KeyVaultName": {
-      "value": "salehexercise-kv"
     }
   }
 }
