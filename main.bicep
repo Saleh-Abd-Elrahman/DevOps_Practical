@@ -16,6 +16,9 @@ param appServicePlanName string
 @description('Name of the Web App')
 param webAppName string
 
+@description('Role assignments for the Key Vault')
+param roleAssignments array
+
 @description('Name of the Key Vault.')
 param keyVaultName string
 
@@ -31,13 +34,7 @@ module keyVaultModule './modules/key-vault.bicep' = {
     name: keyVaultName
     location: location
     enableVaultForDeployment: true
-    roleAssignments: [
-      {
-        principalId: '7200f83e-ec45-4915-8c52-fb94147cfe5a' // Deployment Service Principal
-        roleDefinitionIdOrName: 'Key Vault Secrets User'
-        principalType: 'ServicePrincipal'
-      }
-    ]
+    roleAssignments: roleAssignments
   }
 }
 
