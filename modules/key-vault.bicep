@@ -14,6 +14,8 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-02-01' = {
       family: 'A'
       name: 'standard'
     }
+    publicNetworkAccess: 'Enabled'
+    enableRbacAuthorization: true
   }
 }
 
