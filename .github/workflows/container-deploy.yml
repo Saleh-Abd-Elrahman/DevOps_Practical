@@ -5,12 +5,13 @@ on:
     branches:
       - main
 
-env:
+env:                 # Replace with your Key Vault name
+  ACR_USERNAME_SECRET: acrAdminUserNameSecretName
+  ACR_PASSWORD_SECRET: acrAdminPasswordSecretName
   REGISTRY_LOGIN_SERVER: 'salehexerciseacr.azurecr.io'
   IMAGE_BASE_NAME: 'flask-demo'
   RESOURCE_GROUP: 'BCSAI2024-DEVOPS-STUDENTS-A-DEV'
   WEBAPP_NAME: 'SalehExerciseWebApp'
-  APP_SERVICE_PLAN: 'SalehExerciseAppServicePlan'
   KEY_VAULT_NAME: 'salehexercise-kv-2'
 
 jobs:
@@ -27,18 +28,20 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    # Step 3: Retrieve secrets from Azure Key Vault using Azure CLI
-    - name: Get secrets from Azure Key Vault
+    - name: 'Get ACR credentials from Azure Key Vault'
+      uses: azure/CLI@v1
+      with:
+        inlineScript: |
+          ACR_USERNAME=$(az keyvault secret show --name ${{ env.ACR_USERNAME_SECRET }} --vault-name ${{ env.KEY_VAULT_NAME }} --query value -o tsv)
+          ACR_PASSWORD=$(az keyvault secret show --name ${{ env.ACR_PASSWORD_SECRET }} --vault-name ${{ env.KEY_VAULT_NAME }} --query value -o tsv)
+          echo "REGISTRY_USERNAME=$ACR_USERNAME" >> $GITHUB_ENV
+          echo "REGISTRY_PASSWORD=$ACR_PASSWORD" >> $GITHUB_ENV
+
+    - name: Debug ACR credentials
       run: |
-        REGISTRY_USERNAME=$(az keyvault secret show --vault-name ${{ env.KEY_VAULT_NAME }} --name secretAdminUserName --query value -o tsv)
-        REGISTRY_PASSWORD=$(az keyvault secret show --vault-name ${{ env.KEY_VAULT_NAME}} --name secretAdminPassword1 --query value -o tsv)
-        REGISTRY_PASSWORD1=$(az keyvault secret show --vault-name ${{ env.KEY_VAULT_NAME }} --name secretAdminPassword2 --query value -o tsv)
-        echo "REGISTRY_USERNAME=$REGISTRY_USERNAME" >> $GITHUB_ENV
-        echo "REGISTRY_PASSWORD=$REGISTRY_PASSWORD" >> $GITHUB_ENV
-        echo "REGISTRY_PASSWORD1=$REGISTRY_PASSWORD1" >> $GITHUB_ENV
+        echo "ACR Username: $REGISTRY_USERNAME"
+        echo "ACR Password Length: ${#REGISTRY_PASSWORD}"
 
-
-    
     - name: Login to ACR
       run: |
         echo "$REGISTRY_PASSWORD" | docker login $REGISTRY_LOGIN_SERVER -u $REGISTRY_USERNAME --password-stdin
@@ -47,13 +50,12 @@ jobs:
       id: image-version
       run: echo "version=${GITHUB_REF#refs/heads/}-$(date +'%Y.%m.%d.%H.%M')" >> $GITHUB_OUTPUT
 
-
     - name: Build and Push Docker Image
       run: |
         docker build . -t ${{ env.REGISTRY_LOGIN_SERVER }}/${{env.IMAGE_BASE_NAME}}:${{ steps.image-version.outputs.version }}
-        docker build . -t ${{ env.REGISTRY_LOGIN_SERVER }}/${{env.IMAGE_BASE_NAME}}:${{ github.ref_name }}-latest
+        docker tag ${{ env.REGISTRY_LOGIN_SERVER }}/${{env.IMAGE_BASE_NAME}}:${{ steps.image-version.outputs.version }} ${{ env.REGISTRY_LOGIN_SERVER }}/${{env.IMAGE_BASE_NAME}}:latest
         docker push ${{ env.REGISTRY_LOGIN_SERVER }}/${{env.IMAGE_BASE_NAME}}:${{ steps.image-version.outputs.version }}
-        docker push ${{ env.REGISTRY_LOGIN_SERVER }}/${{env.IMAGE_BASE_NAME}}:${{ github.ref_name }}-latest
+        docker push ${{ env.REGISTRY_LOGIN_SERVER }}/${{env.IMAGE_BASE_NAME}}:latest
 
   deploy:
     runs-on: ubuntu-latest
