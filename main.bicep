@@ -25,6 +25,9 @@ param keyVaultSecretNameACRUsername string
 @description('Name of the Key Vault secret for ACR Password')
 param keyVaultSecretNameACRPassword1 string
 
+@description('Name of the Key Vault secret for ACR Password 2')
+param keyVaultSecretNameACRPassword2 string
+
 
 module acr './modules/acr.bicep' = {
   name: 'acrModule'
@@ -32,7 +35,7 @@ module acr './modules/acr.bicep' = {
     adminCredentialsKeyVaultResourceId: keyvault.id
     adminCredentialsKeyVaultSecretUserName: keyVaultSecretNameACRUsername
     adminCredentialsKeyVaultSecretUserPassword1: keyVaultSecretNameACRPassword1
-    adminCredentialsKeyVaultSecretUserPassword2: keyVaultSecretNameACRPassword1
+    adminCredentialsKeyVaultSecretUserPassword2: keyVaultSecretNameACRPassword2
     name: containerRegistryName
     location: location
     acrAdminUserEnabled: true
