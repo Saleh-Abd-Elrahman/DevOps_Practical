@@ -39,7 +39,7 @@ module acr './modules/acr.bicep' = {
     name: containerRegistryName
     location: location
     acrAdminUserEnabled: true
-    adminCredentialsKeyVaultResourceId: keyVault.outputs.keyVaultResourceId
+    adminCredentialsKeyVaultResourceId: '4633458b-17de-408a-b874-0445c86b69e6'
     adminCredentialsKeyVaultSecretUserName: 'adminUserName'
     adminCredentialsKeyVaultSecretUserPassword1: 'adminPassword1'
     adminCredentialsKeyVaultSecretUserPassword2: 'adminPassword2'
