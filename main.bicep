@@ -25,11 +25,21 @@ param keyVaultName string
 param enableVaultForDeployment bool = true
 
 @description('Key Vault role assignments')
-param roleAssignments object = {
-  principalId: '7200f83e-ec45-4915-8c52-fb94147cfe5a'
-  roleDefinitionIdOrName: 'Key Vault Secrets User'
-  principalType: 'ServicePrincipal'
-}
+param roleAssignments array = [
+
+  {
+    principalId: '7200f83e-ec45-4915-8c52-fb94147cfe5a'
+    roleDefinitionIdOrName: 'Key Vault Secrets User'
+    principalType: 'ServicePrincipal'
+  }
+
+  {
+    principalId: 'a03130df-486f-46ea-9d5c-70522fe056de' // Group.
+    roleDefinitionIdOrName: 'Key Vault Administrator'
+    principalType: 'Group'
+  }
+
+]
 
 @description('Name of the Key Vault secret for ACR Username')
 param acrAdminUserNameSecretName string = 'acrAdminUserName'
