@@ -20,6 +20,13 @@
     "webAppName": {
       "value": "SalehExerciseWebApp"
       
+    },
+    "KeyVaultName": {
+      "value": "SalehExerciseKeyVault"
+    },
+    "enableVaultForDeployment": {
+      "value": true
     }
+
   }
 }
